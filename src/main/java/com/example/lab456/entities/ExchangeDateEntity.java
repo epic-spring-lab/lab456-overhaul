@@ -3,7 +3,7 @@ package com.example.lab456.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -20,7 +20,7 @@ public class ExchangeDateEntity {
     private Long id;
 
     @Column(name = "date", nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @OneToMany(mappedBy = "exchangeDate", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ExchangeRateEntity> rates;
