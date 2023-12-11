@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.Set;
 
+
 @AllArgsConstructor
 @Builder
 @Entity
@@ -19,8 +20,14 @@ public class ExchangeDateEntity {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date", nullable = false)
-    private LocalDate date;
+    @Column(name = "day", nullable = false)
+    private Integer day;
+
+    @Column(name = "month", nullable = false)
+    private Integer month;
+
+    @Column(name = "year", nullable = false)
+    private Integer year;
 
     @OneToMany(mappedBy = "exchangeDate", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ExchangeRateEntity> rates;

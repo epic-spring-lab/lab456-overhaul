@@ -12,5 +12,10 @@ import java.time.LocalDate;
 public class ExchangeDateDAO {
 
     private long id;
-    private LocalDate date;
+
+    private Integer day;
+
+    private Integer month;
+
+    private Integer year;
 }

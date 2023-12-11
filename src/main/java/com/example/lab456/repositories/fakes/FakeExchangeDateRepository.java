@@ -11,10 +11,10 @@ import java.util.Set;
 public class FakeExchangeDateRepository implements OurExchangeDateRepository {
 
     private static final Set<ExchangeDateDAO> exchangeDates = Set.of(
-            ExchangeDateDAO.builder().id(1L).date(LocalDate.of(2021, 1, 1)).build(),
-            ExchangeDateDAO.builder().id(2L).date(LocalDate.of(2021, 1, 2)).build(),
-            ExchangeDateDAO.builder().id(3L).date(LocalDate.of(2021, 1, 3)).build(),
-            ExchangeDateDAO.builder().id(4L).date(LocalDate.now()).build()
+            ExchangeDateDAO.builder().day(1).month(2).year(2023).build(),
+            ExchangeDateDAO.builder().day(2).month(2).year(2023).build(),
+            ExchangeDateDAO.builder().day(3).month(2).year(2023).build(),
+            ExchangeDateDAO.builder().day(4).month(2).year(2023).build()
     );
 
 
@@ -23,7 +23,9 @@ public class FakeExchangeDateRepository implements OurExchangeDateRepository {
         long newId = exchangeDates.size() + 1L;
         ExchangeDateDAO newEntity = ExchangeDateDAO.builder()
                 .id(newId)
-                .date(entity.getDate())
+                .day(entity.getDay())
+                .month(entity.getMonth())
+                .year(entity.getYear())
                 .build();
         exchangeDates.add(newEntity);
         return newId;
@@ -43,7 +45,9 @@ public class FakeExchangeDateRepository implements OurExchangeDateRepository {
                 .filter(exchangeDate -> exchangeDate.getId() == entity.getId())
                 .findFirst()
                 .ifPresent(exchangeDate -> {
-                    exchangeDate.setDate(entity.getDate());
+                    exchangeDate.setDay(entity.getDay());
+                    exchangeDate.setMonth(entity.getMonth());
+                    exchangeDate.setYear(entity.getYear());
                 });
     }
 
