@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.Set;
 
 @AllArgsConstructor
 @Builder
@@ -20,5 +21,8 @@ public class ExchangeDateEntity {
 
     @Column(name = "date", nullable = false)
     private Date date;
+
+    @OneToMany(mappedBy = "exchangeDate", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<ExchangeRateEntity> rates;
 
 }
