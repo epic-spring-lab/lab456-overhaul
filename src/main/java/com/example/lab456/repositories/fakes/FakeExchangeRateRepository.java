@@ -10,7 +10,14 @@ import java.util.Set;
 public class FakeExchangeRateRepository implements OurExchangeRateRepository {
 
     private static final Set<ExchangeRateDAO> exchangeRates = Set.of(
-
+            ExchangeRateDAO.builder().id(1L).exchangeDateId(1L).sourceCurrencyId(1L).targetCurrencyId(2L).build(),
+            ExchangeRateDAO.builder().id(2L).exchangeDateId(1L).sourceCurrencyId(1L).targetCurrencyId(3L).build(),
+            ExchangeRateDAO.builder().id(3L).exchangeDateId(1L).sourceCurrencyId(2L).targetCurrencyId(1L).build(),
+            ExchangeRateDAO.builder().id(4L).exchangeDateId(1L).sourceCurrencyId(2L).targetCurrencyId(3L).build(),
+            ExchangeRateDAO.builder().id(5L).exchangeDateId(1L).sourceCurrencyId(3L).targetCurrencyId(1L).build(),
+            ExchangeRateDAO.builder().id(6L).exchangeDateId(1L).sourceCurrencyId(3L).targetCurrencyId(2L).build(),
+            ExchangeRateDAO.builder().id(7L).exchangeDateId(2L).sourceCurrencyId(1L).targetCurrencyId(2L).build(),
+            ExchangeRateDAO.builder().id(8L).exchangeDateId(2L).sourceCurrencyId(1L).targetCurrencyId(3L).build()
     );
 
     @Override

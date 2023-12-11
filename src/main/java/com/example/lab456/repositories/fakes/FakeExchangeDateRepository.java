@@ -4,13 +4,17 @@ import com.example.lab456.dao.ExchangeDateDAO;
 import com.example.lab456.repositories.OurExchangeDateRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Repository("fakeExchangeDateRepository")
 public class FakeExchangeDateRepository implements OurExchangeDateRepository {
 
     private static final Set<ExchangeDateDAO> exchangeDates = Set.of(
-
+            ExchangeDateDAO.builder().id(1L).date(LocalDate.of(2021, 1, 1)).build(),
+            ExchangeDateDAO.builder().id(2L).date(LocalDate.of(2021, 1, 2)).build(),
+            ExchangeDateDAO.builder().id(3L).date(LocalDate.of(2021, 1, 3)).build(),
+            ExchangeDateDAO.builder().id(4L).date(LocalDate.now()).build()
     );
 
 

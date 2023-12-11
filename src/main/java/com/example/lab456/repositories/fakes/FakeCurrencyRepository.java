@@ -10,7 +10,9 @@ import java.util.Set;
 public class FakeCurrencyRepository implements OurCurrencyRepository {
 
     private static final Set<CurrencyDAO> currencies = Set.of(
-
+            CurrencyDAO.builder().id(1L).name("US Dollar").code("USD").build(),
+            CurrencyDAO.builder().id(2L).name("Euro").code("EUR").build(),
+            CurrencyDAO.builder().id(3L).name("Polish Zloty").code("PLN").build()
     );
 
     @Override
