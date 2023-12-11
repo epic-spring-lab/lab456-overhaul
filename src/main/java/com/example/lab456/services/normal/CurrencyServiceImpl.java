@@ -50,6 +50,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 
         static CurrencyDTO toDTO(CurrencyEntity currencyEntity) {
             return CurrencyDTO.builder()
+                    .id(currencyEntity.getId())
                     .name(currencyEntity.getName())
                     .code(currencyEntity.getCode())
                     .build();
