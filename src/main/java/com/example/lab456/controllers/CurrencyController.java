@@ -1,7 +1,7 @@
 package com.example.lab456.controllers;
 
 import com.example.lab456.dto.CurrencyDTO;
-import com.example.lab456.services.normal.CurrencyService;
+import com.example.lab456.services.CurrencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,26 +15,26 @@ public class CurrencyController {
     private final CurrencyService currencyService;
 
     @PostMapping("")
-    public ResponseEntity<String> createCurrency(@RequestBody CurrencyDTO currencyDTO) {
-        Long createdId = currencyService.createCurrency(currencyDTO);
+    public ResponseEntity<String> create(@RequestBody CurrencyDTO currencyDTO) {
+        Long createdId = currencyService.create(currencyDTO);
         return new ResponseEntity<>("Created currency with id: " + createdId, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CurrencyDTO> getCurrency(@PathVariable Long id) {
-        CurrencyDTO currencyDTO = currencyService.getCurrency(id);
+    public ResponseEntity<CurrencyDTO> get(@PathVariable Long id) {
+        CurrencyDTO currencyDTO = currencyService.get(id);
         return ResponseEntity.ok(currencyDTO);
     }
 
     @PutMapping("/{id}")
-    public void updateCurrency(@PathVariable Long id, @RequestBody CurrencyDTO currencyDTO) {
+    public void update(@PathVariable Long id, @RequestBody CurrencyDTO currencyDTO) {
         currencyDTO.setId(id);
-        currencyService.updateCurrency(currencyDTO);
+        currencyService.update(currencyDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCurrency(@PathVariable Long id) {
-        currencyService.deleteCurrency(id);
+    public void delete(@PathVariable Long id) {
+        currencyService.delete(id);
     }
 
 }

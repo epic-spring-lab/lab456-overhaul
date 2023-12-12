@@ -3,6 +3,7 @@ package com.example.lab456.services.normal;
 import com.example.lab456.dto.CurrencyDTO;
 import com.example.lab456.entities.CurrencyEntity;
 import com.example.lab456.repositories.normal.CurrencyRepository;
+import com.example.lab456.services.CurrencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,20 +14,20 @@ public class CurrencyServiceImpl implements CurrencyService {
     private final CurrencyRepository currencyRepository;
 
     @Override
-    public Long createCurrency(CurrencyDTO currencyDTO) {
+    public Long create(CurrencyDTO currencyDTO) {
         CurrencyEntity currencyEntity = CurrencyMapper.toEntity(currencyDTO);
         return currencyRepository.save(currencyEntity).getId();
     }
 
     @Override
-    public CurrencyDTO getCurrency(Long id) {
+    public CurrencyDTO get(Long id) {
         return currencyRepository.findById(id)
                 .map(CurrencyMapper::toDTO)
                 .orElse(null);
     }
 
     @Override
-    public void updateCurrency(CurrencyDTO currencyDTO) {
+    public void update(CurrencyDTO currencyDTO) {
         currencyRepository.findById(currencyDTO.getId())
                 .ifPresent(currencyEntity -> {
                     currencyEntity.setName(currencyDTO.getName());
@@ -36,7 +37,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public void deleteCurrency(Long id) {
+    public void delete(Long id) {
         currencyRepository.deleteById(id);
     }
 
