@@ -1,5 +1,6 @@
 package com.example.lab456.entities;
 
+import com.example.lab456.dto.CurrencyDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,5 +31,13 @@ public class CurrencyEntity {
 
     @OneToMany(mappedBy = "targetCurrency", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ExchangeRateEntity> targetRates;
+
+    public CurrencyDTO toDto() {
+        return CurrencyDTO.builder()
+                .id(id)
+                .name(name)
+                .code(code)
+                .build();
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.lab456.entities;
 
+import com.example.lab456.dto.ExchangeDateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,4 +33,12 @@ public class ExchangeDateEntity {
     @OneToMany(mappedBy = "exchangeDate", orphanRemoval = true, cascade = CascadeType.ALL)
     private Set<ExchangeRateEntity> rates;
 
+    public ExchangeDateDTO toDto() {
+        return ExchangeDateDTO.builder()
+                .id(id)
+                .day(day)
+                .month(month)
+                .year(year)
+                .build();
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.lab456.services.normal;
 
 import com.example.lab456.dto.CurrencyDTO;
+import com.example.lab456.dto.crupdate.CrupdateCurrencyDTO;
 import com.example.lab456.entities.CurrencyEntity;
 import com.example.lab456.repositories.normal.CurrencyRepository;
 import com.example.lab456.services.CurrencyService;
@@ -14,7 +15,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     private final CurrencyRepository currencyRepository;
 
     @Override
-    public Long create(CurrencyDTO currencyDTO) {
+    public Long create(CrupdateCurrencyDTO currencyDTO) {
         CurrencyEntity currencyEntity = CurrencyMapper.toEntity(currencyDTO);
         return currencyRepository.save(currencyEntity).getId();
     }
@@ -22,13 +23,13 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public CurrencyDTO get(Long id) {
         return currencyRepository.findById(id)
-                .map(CurrencyMapper::toDTO)
+                .map(CurrencyEntity::toDto)
                 .orElse(null);
     }
 
     @Override
-    public void update(CurrencyDTO currencyDTO) {
-        currencyRepository.findById(currencyDTO.getId())
+    public void update(Long id, CrupdateCurrencyDTO currencyDTO) {
+        currencyRepository.findById(id)
                 .ifPresent(currencyEntity -> {
                     currencyEntity.setName(currencyDTO.getName());
                     currencyEntity.setCode(currencyDTO.getCode());
@@ -42,18 +43,10 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     private static class CurrencyMapper {
-        static CurrencyEntity toEntity(CurrencyDTO currencyDTO) {
+        static CurrencyEntity toEntity(CrupdateCurrencyDTO currencyDTO) {
             return CurrencyEntity.builder()
                     .name(currencyDTO.getName())
                     .code(currencyDTO.getCode())
-                    .build();
-        }
-
-        static CurrencyDTO toDTO(CurrencyEntity currencyEntity) {
-            return CurrencyDTO.builder()
-                    .id(currencyEntity.getId())
-                    .name(currencyEntity.getName())
-                    .code(currencyEntity.getCode())
                     .build();
         }
     }

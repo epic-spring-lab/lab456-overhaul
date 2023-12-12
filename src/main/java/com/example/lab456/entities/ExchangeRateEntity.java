@@ -1,5 +1,6 @@
 package com.example.lab456.entities;
 
+import com.example.lab456.dto.ExchangeRateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,5 +31,15 @@ public class ExchangeRateEntity {
 
     @Column(name = "rate", nullable = false, precision = 10)
     private Double rate;
+
+    public ExchangeRateDTO toDto() {
+        return ExchangeRateDTO.builder()
+                .id(id)
+                .exchangeDate(exchangeDate.toDto())
+                .sourceCurrency(sourceCurrency.toDto())
+                .targetCurrency(targetCurrency.toDto())
+                .rate(rate)
+                .build();
+    }
 
 }
