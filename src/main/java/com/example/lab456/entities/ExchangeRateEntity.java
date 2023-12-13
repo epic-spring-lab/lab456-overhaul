@@ -11,6 +11,10 @@ import lombok.*;
 @NoArgsConstructor
 @Setter
 @Table(name = "exchange_rates")
+@NamedQuery(
+        name = "ExchangeRateEntity.findExchangesForDate",
+        query = "SELECT er FROM ExchangeRateEntity er where er.exchangeDate.day = :day and er.exchangeDate.month = :month and er.exchangeDate.year = :year"
+)
 public class ExchangeRateEntity {
 
     @Id
