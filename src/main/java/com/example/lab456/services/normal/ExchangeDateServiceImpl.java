@@ -8,6 +8,8 @@ import com.example.lab456.services.ExchangeDateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("normalExchangeDateService")
 @RequiredArgsConstructor
 public class ExchangeDateServiceImpl implements ExchangeDateService {
@@ -40,6 +42,21 @@ public class ExchangeDateServiceImpl implements ExchangeDateService {
     @Override
     public void delete(Long id) {
         exchangeDateRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAll() {
+        exchangeDateRepository.deleteAll();
+    }
+
+    @Override
+    public List<ExchangeDateEntity> createAll(List<ExchangeDateEntity> dateEntities) {
+        return (List<ExchangeDateEntity>) exchangeDateRepository.saveAll(dateEntities);
+    }
+
+    @Override
+    public List<ExchangeDateEntity> getAll() {
+        return exchangeDateRepository.findAll();
     }
 
     private static class ExchangeRateMapper {

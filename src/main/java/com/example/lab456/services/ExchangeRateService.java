@@ -2,8 +2,19 @@ package com.example.lab456.services;
 
 import com.example.lab456.dto.ExchangeRateDTO;
 import com.example.lab456.dto.crupdate.CrupdateExchangeRateDTO;
+import com.example.lab456.entities.ExchangeRateEntity;
 
-public interface ExchangeRateService{
+import java.util.List;
+
+public interface ExchangeRateService {
+
+    List<ExchangeRateDTO> getAll();
+
+    List<ExchangeRateDTO> getAllTodayExchanges();
+
+    List<ExchangeRateDTO> getAllByCurrencyAndDate(int day, int month, int year, String source, String target);
+
+    List<ExchangeRateDTO> getAllExchangesByPair(String source, String target);
 
     Long create(CrupdateExchangeRateDTO exchangeRateDTO);
 
@@ -13,5 +24,7 @@ public interface ExchangeRateService{
 
     void delete(Long id);
 
+    void deleteAll();
 
+    List<ExchangeRateEntity> createAll(List<ExchangeRateEntity> exchanges);
 }

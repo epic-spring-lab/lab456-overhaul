@@ -8,6 +8,8 @@ import com.example.lab456.services.CurrencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service("normalCurrencyService")
 public class CurrencyServiceImpl implements CurrencyService {
@@ -40,6 +42,16 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public void delete(Long id) {
         currencyRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CurrencyEntity> getAll() {
+        return currencyRepository.findAll();
+    }
+
+    @Override
+    public List<CurrencyEntity> createAll(List<CurrencyEntity> currencies) {
+        return (List<CurrencyEntity>) currencyRepository.saveAll(currencies);
     }
 
     private static class CurrencyMapper {

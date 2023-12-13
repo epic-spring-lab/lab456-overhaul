@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/exchange-rates")
 @RequiredArgsConstructor
@@ -23,6 +25,30 @@ public class ExchangeRateController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(exchangeRateDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<ExchangeRateDTO>> getAll() {
+        return new ResponseEntity<>(exchangeRateService.getAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/today")
+    public ResponseEntity<List<ExchangeRateDTO>> getAllTodayRates() {
+        return new ResponseEntity<>(exchangeRateService.getAllTodayExchanges(), HttpStatus.OK);
+    }
+
+    @GetMapping("/pair")
+    public ResponseEntity<List<ExchangeRateDTO>> getAllExchangesByPair(@RequestParam(required = false, name = "source") String source, @RequestParam(required = false, name = "target") String target) {
+        return new ResponseEntity<>(exchangeRateService.getAllExchangesByPair(source, target), HttpStatus.OK);
+    }
+
+    @GetMapping("/currency")
+    public ResponseEntity<List<ExchangeRateDTO>> getAllByCurrencyAndDate(@RequestParam(required = false, name = "source") String source,
+                                                                         @RequestParam(required = false, name = "target") String target,
+                                                                         @RequestParam(required = false, name = "day") int day,
+                                                                         @RequestParam(required = false, name = "month") int month,
+                                                                         @RequestParam(required = false, name = "year") int year) {
+        return new ResponseEntity<>(exchangeRateService.getAllByCurrencyAndDate(day, month, year, source, target), HttpStatus.OK);
     }
 
     @PostMapping("")
