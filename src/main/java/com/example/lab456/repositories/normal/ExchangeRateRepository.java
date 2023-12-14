@@ -16,7 +16,7 @@ public interface ExchangeRateRepository extends CrudRepository<ExchangeRateEntit
     List<ExchangeRateEntity> findBySourceCurrencyAndTargetCurrency(CurrencyEntity sourceCurrency, CurrencyEntity targetCurrency);
 
     //query example 0
-    @Query(value = "select * from rates",
+    @Query(value = "select * from exchange_rates",
             nativeQuery = true)
     @Transactional(readOnly = true)
     List<ExchangeRateEntity> findAll();
