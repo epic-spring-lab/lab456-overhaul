@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,8 +23,12 @@ public class JDBCExchangeDateDAO implements ExchangeDateDAO {
     }
 
     @Override
-    public ExchangeDateEntity read(Long id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM exchange_dates WHERE id = ?", EXCHANGE_DATE_ROW_MAPPER, id);
+    public Optional<ExchangeDateEntity> read(Long id) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject("SELECT * FROM exchange_dates WHERE id = ?", EXCHANGE_DATE_ROW_MAPPER, id));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     @Override

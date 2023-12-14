@@ -30,7 +30,7 @@ public class ExchangeDateEntity {
     @Column(name = "year", nullable = false)
     private Integer year;
 
-    @OneToMany(mappedBy = "exchangeDate", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "exchangeDate", orphanRemoval = true, cascade = CascadeType.MERGE)
     private Set<ExchangeRateEntity> rates;
 
     public ExchangeDateDTO toDto() {

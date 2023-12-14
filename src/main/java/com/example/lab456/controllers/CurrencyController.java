@@ -27,7 +27,7 @@ public class CurrencyController {
     private final DAOCurrencyService daoCurrencyService;
 
     @Autowired
-    public CurrencyController(@Qualifier("normalCurrencyService") CRUDCurrencyService currencyService,
+    public CurrencyController(@Qualifier("daoCurrencyService") CRUDCurrencyService currencyService,
                               @Qualifier("daoCurrencyService") DAOCurrencyService daoCurrencyService) {
         this.currencyService = currencyService;
         this.daoCurrencyService = daoCurrencyService;
@@ -38,6 +38,16 @@ public class CurrencyController {
             summary = "Create a new currency",
             description = "Creates a new currency with the provided data."
     )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Currency created successfully",
+            content = @Content(schema = @Schema(implementation = String.class))
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Invalid data provided",
+            content = @Content(schema = @Schema(implementation = String.class))
+    )
     public ResponseEntity<String> create(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Currency data for creation",
@@ -45,8 +55,12 @@ public class CurrencyController {
                     content = @Content(schema = @Schema(implementation = CrupdateCurrencyDTO.class))
             )
             @RequestBody CrupdateCurrencyDTO currencyDTO) {
-        Long createdId = currencyService.create(currencyDTO);
-        return new ResponseEntity<>("Created currency with id: " + createdId, HttpStatus.CREATED);
+        try {
+            Long createdId = currencyService.create(currencyDTO);
+            return new ResponseEntity<>("Created currency with id: " + createdId, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
@@ -59,17 +73,31 @@ public class CurrencyController {
             description = "Successful operation",
             content = @Content(schema = @Schema(implementation = CurrencyDTO.class))
     )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Currency not found",
+            content = @Content(schema = @Schema(implementation = String.class))
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Invalid data provided",
+            content = @Content(schema = @Schema(implementation = String.class))
+    )
     public ResponseEntity<CurrencyDTO> get(
             @Parameter(
                     description = "ID of the currency to retrieve",
                     required = true
             )
             @PathVariable Long id) {
-        CurrencyDTO currencyDTO = currencyService.get(id);
-        if (currencyDTO == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            CurrencyDTO currencyDTO = currencyService.get(id);
+            if (currencyDTO == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(currencyDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(currencyDTO, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -118,6 +146,11 @@ public class CurrencyController {
             description = "Successful operation",
             content = @Content(schema = @Schema(implementation = CurrencyDTO.class))
     )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Invalid data provided",
+            content = @Content(schema = @Schema(implementation = String.class))
+    )
     public ResponseEntity<List<CurrencyDTO>> filterByName(
             @Parameter(
                     description = "Name of the currency to filter",
@@ -130,5 +163,22 @@ public class CurrencyController {
         List<CurrencyDTO> currencyDTOs = daoCurrencyService.filterByName(name);
         return new ResponseEntity<>(currencyDTOs, HttpStatus.OK);
     }
+
+    @PostMapping("/createAndUpdate")
+    @Operation(
+            summary = "Create and update currency",
+            description = "Create and update currency"
+    )
+    public ResponseEntity<CurrencyDTO> createAndUpdate(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Currency data for creation",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = CrupdateCurrencyDTO.class))
+            )
+            @RequestBody CrupdateCurrencyDTO currencyDTO) {
+        CurrencyDTO createdCurrencyDTO = daoCurrencyService.createAndUpdate(currencyDTO);
+        return new ResponseEntity<>(createdCurrencyDTO, HttpStatus.CREATED);
+    }
+
 
 }

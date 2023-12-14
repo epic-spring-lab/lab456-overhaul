@@ -26,10 +26,10 @@ public class CurrencyEntity {
     @Column(name = "code", nullable = false)
     private String code;
 
-    @OneToMany(mappedBy = "sourceCurrency", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sourceCurrency", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Set<ExchangeRateEntity> sourceRates;
 
-    @OneToMany(mappedBy = "targetCurrency", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "targetCurrency", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Set<ExchangeRateEntity> targetRates;
 
     public CurrencyDTO toDto() {

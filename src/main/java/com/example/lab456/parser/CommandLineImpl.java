@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,6 +96,7 @@ public class CommandLineImpl implements CommandLineRunner {
         }
         //insert all the data into database
         exchangeService.createAll(rates);
+        Logger.getLogger("Parser").info("Data was parsed and inserted into database");
     }
 
     private void putDateInMap(ExchangeDateEntity dt, Map<String, String> map) {

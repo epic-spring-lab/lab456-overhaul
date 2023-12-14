@@ -25,7 +25,7 @@ public class DAOExchangeDateServiceImpl implements DAOExchangeDateService, CRUDE
 
     @Override
     public ExchangeDateDTO get(Long id) {
-        return jdbcExchangeDateDAO.read(id).toDto();
+        return jdbcExchangeDateDAO.read(id).map(ExchangeDateEntity::toDto).orElse(null);
     }
 
     @Override

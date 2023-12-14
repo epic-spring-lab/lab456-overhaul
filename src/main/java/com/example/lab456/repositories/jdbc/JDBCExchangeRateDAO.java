@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,9 +34,12 @@ public class JDBCExchangeRateDAO implements ExchangeRateDAO {
             "JOIN exchange_dates ed ON er.exchange_date_id = ed.id";
 
     @Override
-    public ExchangeRateEntity read(Long id) {
-        // perform join query to get all data
-        return jdbcTemplate.queryForObject(query + " WHERE er.id = ?", EXCHANGE_RATE_ROW_MAPPER, id);
+    public Optional<ExchangeRateEntity> read(Long id) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(query + " WHERE er.id = ?", EXCHANGE_RATE_ROW_MAPPER, id));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     @Override

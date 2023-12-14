@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ExchangeDateRepository extends CrudRepository<ExchangeDateEntity, Long> {
     //query example 5
-    @Transactional
+
     @Query(value = "select * from exchange_dates", nativeQuery = true)
     List<ExchangeDateEntity> findAll();
 }

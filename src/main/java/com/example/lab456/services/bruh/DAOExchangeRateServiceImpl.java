@@ -25,7 +25,7 @@ public class DAOExchangeRateServiceImpl implements DAOExchangeRateService, CRUDE
 
     @Override
     public ExchangeRateDTO get(Long id) {
-        return jdbcExchangeRateDAO.read(id).toDto();
+        return jdbcExchangeRateDAO.read(id).map(ExchangeRateEntity::toDto).orElse(null);
     }
 
     @Override

@@ -12,7 +12,7 @@ public interface CurrencyRepository extends CrudRepository<CurrencyEntity, Long>
     CurrencyEntity findByName(String name);
 
     //query example 4
-    @Transactional(readOnly = true)
+
     @Query(value = "select * from currencies", nativeQuery = true)
     List<CurrencyEntity> findAll();
 }

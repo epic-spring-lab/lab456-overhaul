@@ -9,6 +9,7 @@ import com.example.lab456.services.interfaces.CRUDCurrencyService;
 import com.example.lab456.services.interfaces.DAOCurrencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,13 +25,23 @@ public class DAOCurrencyServiceImpl implements DAOCurrencyService, CRUDCurrencyS
     }
 
     @Override
+    @Transactional
+    public CurrencyDTO createAndUpdate(CrupdateCurrencyDTO currencyDTO) {
+        Long currencyId = jdbcCurrencyDAO.create(CurrencyMapper.toEntity(currencyDTO));
+        CurrencyEntity updatedEntity = jdbcCurrencyDAO.read(currencyId).orElseThrow();
+        updatedEntity.setName("Updated name");
+        jdbcCurrencyDAO.update(updatedEntity);
+        return updatedEntity.toDto();
+    }
+
+    @Override
     public Long create(CrupdateCurrencyDTO currencyDTO) {
         return jdbcCurrencyDAO.create(CurrencyMapper.toEntity(currencyDTO));
     }
 
     @Override
     public CurrencyDTO get(Long id) {
-        return jdbcCurrencyDAO.read(id).toDto();
+        return jdbcCurrencyDAO.read(id).map(CurrencyEntity::toDto).orElse(null);
     }
 
     @Override
