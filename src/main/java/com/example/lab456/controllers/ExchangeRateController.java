@@ -2,8 +2,12 @@ package com.example.lab456.controllers;
 
 import com.example.lab456.dto.ExchangeRateDTO;
 import com.example.lab456.dto.crupdate.CrupdateExchangeRateDTO;
-import com.example.lab456.services.ExchangeRateService;
+import com.example.lab456.services.interfaces.CRUDExchangeRateService;
+import com.example.lab456.services.interfaces.DAOExchangeRateService;
+import com.example.lab456.services.interfaces.NormalExchangeRateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +23,23 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("api/v1/exchange-rates")
-@RequiredArgsConstructor
 @Tag(name = "Exchange Rate Controller", description = "API operations related to exchange rates")
 public class ExchangeRateController {
 
-    private final ExchangeRateService exchangeRateService;
+    private final NormalExchangeRateService exchangeRateService;
+    private final CRUDExchangeRateService crudExchangeRateService;
+
+    private final DAOExchangeRateService daoExchangeRateService;
+
+    @Autowired
+    public ExchangeRateController(
+            @Qualifier("normalExchangeRateService") NormalExchangeRateService exchangeRateService,
+            @Qualifier("normalExchangeRateService") CRUDExchangeRateService crudExchangeRateService,
+            @Qualifier("daoExchangeRateService") DAOExchangeRateService daoExchangeRateService) {
+        this.exchangeRateService = exchangeRateService;
+        this.crudExchangeRateService = crudExchangeRateService;
+        this.daoExchangeRateService = daoExchangeRateService;
+    }
 
     @GetMapping("/{id}")
     @Operation(
@@ -41,7 +57,7 @@ public class ExchangeRateController {
                     required = true
             )
             @PathVariable Long id) {
-        ExchangeRateDTO exchangeRateDTO = exchangeRateService.get(id);
+        ExchangeRateDTO exchangeRateDTO = crudExchangeRateService.get(id);
         if (exchangeRateDTO == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -151,7 +167,7 @@ public class ExchangeRateController {
                     content = @Content(schema = @Schema(implementation = CrupdateExchangeRateDTO.class))
             )
             @RequestBody CrupdateExchangeRateDTO exchangeRateDTO) {
-        Long createdId = exchangeRateService.create(exchangeRateDTO);
+        Long createdId = crudExchangeRateService.create(exchangeRateDTO);
         return new ResponseEntity<>("Created exchange rate with id: " + createdId, HttpStatus.CREATED);
     }
 
@@ -172,7 +188,7 @@ public class ExchangeRateController {
                     content = @Content(schema = @Schema(implementation = CrupdateExchangeRateDTO.class))
             )
             @RequestBody CrupdateExchangeRateDTO exchangeRateDTO) {
-        exchangeRateService.update(id, exchangeRateDTO);
+        crudExchangeRateService.update(id, exchangeRateDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -187,7 +203,37 @@ public class ExchangeRateController {
                     required = true
             )
             @PathVariable Long id) {
-        exchangeRateService.delete(id);
+        crudExchangeRateService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/filter-with-pagination")
+    @Operation(
+            summary = "Get all exchange rates by source with pagination",
+            description = "Retrieves information about all exchange rates based on the provided source currency with pagination."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Successful operation",
+            content = @Content(schema = @Schema(implementation = ExchangeRateDTO.class))
+    )
+    public ResponseEntity<List<ExchangeRateDTO>> filterBySourceWithPagination(
+            @Parameter(
+                    description = "Page number",
+                    required = false
+            )
+            @RequestParam(required = false, name = "page") int page,
+            @Parameter(
+                    description = "Page size",
+                    required = false
+            )
+            @RequestParam(required = false, name = "size") int size,
+            @Parameter(
+                    description = "Source currency",
+                    required = false
+            )
+            @RequestParam(required = false, name = "source") String source) {
+        return new ResponseEntity<>(daoExchangeRateService.filterBySourceWithPagination(page, size, source), HttpStatus.OK);
+    }
+
 }

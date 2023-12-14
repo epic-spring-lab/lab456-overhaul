@@ -4,7 +4,8 @@ import com.example.lab456.dto.ExchangeDateDTO;
 import com.example.lab456.dto.crupdate.CrupdateExchangeDateDTO;
 import com.example.lab456.entities.ExchangeDateEntity;
 import com.example.lab456.repositories.normal.ExchangeDateRepository;
-import com.example.lab456.services.ExchangeDateService;
+import com.example.lab456.services.interfaces.CRUDExchangeDateService;
+import com.example.lab456.services.interfaces.NormalExchangeDateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Service("normalExchangeDateService")
 @RequiredArgsConstructor
-public class ExchangeDateServiceImpl implements ExchangeDateService {
+public class ExchangeDateServiceImpl implements CRUDExchangeDateService, NormalExchangeDateService {
 
     private final ExchangeDateRepository exchangeDateRepository;
 

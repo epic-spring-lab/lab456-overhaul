@@ -2,25 +2,36 @@ package com.example.lab456.controllers;
 
 import com.example.lab456.dto.CurrencyDTO;
 import com.example.lab456.dto.crupdate.CrupdateCurrencyDTO;
-import com.example.lab456.services.CurrencyService;
+import com.example.lab456.services.interfaces.CRUDCurrencyService;
+import com.example.lab456.services.interfaces.DAOCurrencyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/currencies")
-@RequiredArgsConstructor
 @Tag(name = "Currency Controller", description = "API operations related to currencies")
 public class CurrencyController {
 
-    private final CurrencyService currencyService;
+    private final CRUDCurrencyService currencyService;
+    private final DAOCurrencyService daoCurrencyService;
+
+    @Autowired
+    public CurrencyController(@Qualifier("normalCurrencyService") CRUDCurrencyService currencyService,
+                              @Qualifier("daoCurrencyService") DAOCurrencyService daoCurrencyService) {
+        this.currencyService = currencyService;
+        this.daoCurrencyService = daoCurrencyService;
+    }
 
     @PostMapping("")
     @Operation(
@@ -96,4 +107,28 @@ public class CurrencyController {
         currencyService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/filter")
+    @Operation(
+            summary = "Filter currencies by name",
+            description = "Filters currencies based on the provided name."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Successful operation",
+            content = @Content(schema = @Schema(implementation = CurrencyDTO.class))
+    )
+    public ResponseEntity<List<CurrencyDTO>> filterByName(
+            @Parameter(
+                    description = "Name of the currency to filter",
+                    required = true
+            )
+            @RequestParam String name) {
+        if (name == null || name.isBlank()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<CurrencyDTO> currencyDTOs = daoCurrencyService.filterByName(name);
+        return new ResponseEntity<>(currencyDTOs, HttpStatus.OK);
+    }
+
 }

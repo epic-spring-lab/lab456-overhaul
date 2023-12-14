@@ -3,14 +3,15 @@ package com.example.lab456.parser;
 import com.example.lab456.entities.CurrencyEntity;
 import com.example.lab456.entities.ExchangeDateEntity;
 import com.example.lab456.entities.ExchangeRateEntity;
-import com.example.lab456.services.CurrencyService;
-import com.example.lab456.services.ExchangeDateService;
-import com.example.lab456.services.ExchangeRateService;
-import lombok.RequiredArgsConstructor;
+import com.example.lab456.services.interfaces.NormalCurrencyService;
+import com.example.lab456.services.interfaces.NormalExchangeDateService;
+import com.example.lab456.services.interfaces.NormalExchangeRateService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -24,13 +25,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-@RequiredArgsConstructor
 public class CommandLineImpl implements CommandLineRunner {
-    private final CurrencyService currencyService;
+    private final NormalCurrencyService currencyService;
+    private final NormalExchangeRateService exchangeService;
+    private final NormalExchangeDateService dateService;
 
-    private final ExchangeRateService exchangeService;
-
-    private final ExchangeDateService dateService;
+    @Autowired
+    public CommandLineImpl(@Qualifier("normalCurrencyService") NormalCurrencyService currencyService,
+                           @Qualifier("normalExchangeRateService") NormalExchangeRateService exchangeService,
+                           @Qualifier("normalExchangeDateService") NormalExchangeDateService dateService) {
+        this.currencyService = currencyService;
+        this.exchangeService = exchangeService;
+        this.dateService = dateService;
+    }
 
     @Override
     public void run(String... args) {

@@ -2,7 +2,9 @@ package com.example.lab456.controllers;
 
 import com.example.lab456.dto.ExchangeDateDTO;
 import com.example.lab456.dto.crupdate.CrupdateExchangeDateDTO;
-import com.example.lab456.services.ExchangeDateService;
+import com.example.lab456.services.interfaces.CRUDExchangeDateService;
+import com.example.lab456.services.interfaces.DAOExchangeDateService;
+import com.example.lab456.services.interfaces.NormalExchangeDateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -10,17 +12,29 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/exchange-dates")
-@RequiredArgsConstructor
 @Tag(name = "Exchange Date Controller", description = "API operations related to exchange dates")
 public class ExchangeDateController {
 
-    private final ExchangeDateService exchangeDateService;
+    private final CRUDExchangeDateService crudExchangeDateService;
+    private final DAOExchangeDateService daoExchangeDateService;
+
+    @Autowired
+    public ExchangeDateController(
+            @Qualifier("normalExchangeDateService") CRUDExchangeDateService crudExchangeDateService,
+            @Qualifier("daoExchangeDateService") DAOExchangeDateService daoExchangeDateService) {
+        this.crudExchangeDateService = crudExchangeDateService;
+        this.daoExchangeDateService = daoExchangeDateService;
+    }
 
     @GetMapping("/{id}")
     @Operation(
@@ -38,7 +52,7 @@ public class ExchangeDateController {
                     required = true
             )
             @PathVariable Long id) {
-        ExchangeDateDTO exchangeDateDTO = exchangeDateService.get(id);
+        ExchangeDateDTO exchangeDateDTO = crudExchangeDateService.get(id);
         if (exchangeDateDTO == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -57,7 +71,7 @@ public class ExchangeDateController {
                     content = @Content(schema = @Schema(implementation = CrupdateExchangeDateDTO.class))
             )
             @RequestBody CrupdateExchangeDateDTO exchangeDateDTO) {
-        Long createdId = exchangeDateService.create(exchangeDateDTO);
+        Long createdId = crudExchangeDateService.create(exchangeDateDTO);
         return new ResponseEntity<>("Created exchange rate with id: " + createdId, HttpStatus.CREATED);
     }
 
@@ -78,7 +92,7 @@ public class ExchangeDateController {
                     content = @Content(schema = @Schema(implementation = CrupdateExchangeDateDTO.class))
             )
             @RequestBody CrupdateExchangeDateDTO exchangeDateDTO) {
-        exchangeDateService.update(id, exchangeDateDTO);
+        crudExchangeDateService.update(id, exchangeDateDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -93,7 +107,30 @@ public class ExchangeDateController {
                     required = true
             )
             @PathVariable Long id) {
-        exchangeDateService.delete(id);
+        crudExchangeDateService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/even-dates")
+    @Operation(
+            summary = "Get all even dates for a year",
+            description = "Retrieves all even dates for a year."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Successful operation",
+            content = @Content(schema = @Schema(implementation = ExchangeDateDTO.class))
+    )
+    public ResponseEntity<List<ExchangeDateDTO>> getEvenDates(
+            @Parameter(
+                    description = "Year of the exchange date to retrieve",
+                    required = true
+            )
+            @RequestParam int year) {
+        List<ExchangeDateDTO> exchangeDateDTOs = daoExchangeDateService.findEvenDatesForYear(year);
+        if (exchangeDateDTOs == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(exchangeDateDTOs, HttpStatus.OK);
     }
 }

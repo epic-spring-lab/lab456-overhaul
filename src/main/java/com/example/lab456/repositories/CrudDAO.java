@@ -1,7 +1,7 @@
 package com.example.lab456.repositories;
 
 
-public interface OurCrudRepository<T> {
+public interface CrudDAO<T> {
 
     Long create(T entity);
 

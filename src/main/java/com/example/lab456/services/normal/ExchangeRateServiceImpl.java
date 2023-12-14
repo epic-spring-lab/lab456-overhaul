@@ -1,6 +1,5 @@
 package com.example.lab456.services.normal;
 
-import com.example.lab456.dto.ExchangeDateDTO;
 import com.example.lab456.dto.ExchangeRateDTO;
 import com.example.lab456.dto.crupdate.CrupdateExchangeRateDTO;
 import com.example.lab456.entities.CurrencyEntity;
@@ -8,7 +7,8 @@ import com.example.lab456.entities.ExchangeDateEntity;
 import com.example.lab456.entities.ExchangeRateEntity;
 import com.example.lab456.repositories.normal.CurrencyRepository;
 import com.example.lab456.repositories.normal.ExchangeRateRepository;
-import com.example.lab456.services.ExchangeRateService;
+import com.example.lab456.services.interfaces.CRUDExchangeRateService;
+import com.example.lab456.services.interfaces.NormalExchangeRateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service("normalExchangeRateService")
 @RequiredArgsConstructor
-public class ExchangeRateServiceImpl implements ExchangeRateService {
+public class ExchangeRateServiceImpl implements CRUDExchangeRateService, NormalExchangeRateService {
 
     private final CurrencyRepository currencyRepository;
 

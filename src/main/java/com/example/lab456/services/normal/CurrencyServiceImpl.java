@@ -4,7 +4,8 @@ import com.example.lab456.dto.CurrencyDTO;
 import com.example.lab456.dto.crupdate.CrupdateCurrencyDTO;
 import com.example.lab456.entities.CurrencyEntity;
 import com.example.lab456.repositories.normal.CurrencyRepository;
-import com.example.lab456.services.CurrencyService;
+import com.example.lab456.services.interfaces.CRUDCurrencyService;
+import com.example.lab456.services.interfaces.NormalCurrencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service("normalCurrencyService")
-public class CurrencyServiceImpl implements CurrencyService {
+public class CurrencyServiceImpl implements CRUDCurrencyService, NormalCurrencyService {
 
     private final CurrencyRepository currencyRepository;
 
