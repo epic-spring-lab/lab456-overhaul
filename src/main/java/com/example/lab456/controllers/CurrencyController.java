@@ -193,9 +193,9 @@ public class CurrencyController {
             summary = "Create list of currencies",
             description = "Create list of currencies"
     )
-    public ResponseEntity<List<CurrencyEntity>> createAll(@RequestBody List<CrupdateCurrencyDTO> currencyDTOs){
-        List<CurrencyEntity> currencyEntities = normalCurrencyService.createAll(currencyDTOs);
-        return new ResponseEntity<>(currencyEntities, HttpStatus.CREATED);
+    public ResponseEntity<List<CrupdateCurrencyDTO>> createAll(@RequestBody List<CrupdateCurrencyDTO> currencyDTOs){
+        normalCurrencyService.createAll(currencyDTOs);
+        return new ResponseEntity<>(currencyDTOs, HttpStatus.CREATED);
     }
 
 
