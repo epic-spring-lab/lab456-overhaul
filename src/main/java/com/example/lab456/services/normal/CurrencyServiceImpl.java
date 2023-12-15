@@ -3,11 +3,13 @@ package com.example.lab456.services.normal;
 import com.example.lab456.dto.CurrencyDTO;
 import com.example.lab456.dto.crupdate.CrupdateCurrencyDTO;
 import com.example.lab456.entities.CurrencyEntity;
+import com.example.lab456.mappers.CurrencyMapper;
 import com.example.lab456.repositories.normal.CurrencyRepository;
 import com.example.lab456.services.interfaces.CRUDCurrencyService;
 import com.example.lab456.services.interfaces.NormalCurrencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,9 +52,13 @@ public class CurrencyServiceImpl implements CRUDCurrencyService, NormalCurrencyS
         return currencyRepository.findAll();
     }
 
+    @Transactional
     @Override
-    public List<CurrencyEntity> createAll(List<CurrencyEntity> currencies) {
-        return (List<CurrencyEntity>) currencyRepository.saveAll(currencies);
+    public List<CurrencyEntity> createAll(List<CurrencyEntity> currencyEntities) {
+        currencyEntities.forEach(currencyEntity -> {
+            currencyRepository.save(currencyEntity);
+        });
+        return currencyEntities;
     }
 
     private static class CurrencyMapper {

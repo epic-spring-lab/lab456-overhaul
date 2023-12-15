@@ -2,8 +2,10 @@ package com.example.lab456.controllers;
 
 import com.example.lab456.dto.CurrencyDTO;
 import com.example.lab456.dto.crupdate.CrupdateCurrencyDTO;
+import com.example.lab456.entities.CurrencyEntity;
 import com.example.lab456.services.interfaces.CRUDCurrencyService;
 import com.example.lab456.services.interfaces.DAOCurrencyService;
+import com.example.lab456.services.interfaces.NormalCurrencyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +29,15 @@ public class CurrencyController {
     private final CRUDCurrencyService currencyService;
     private final DAOCurrencyService daoCurrencyService;
 
+    private final NormalCurrencyService normalCurrencyService;
+
     @Autowired
     public CurrencyController(@Qualifier("daoCurrencyService") CRUDCurrencyService currencyService,
-                              @Qualifier("daoCurrencyService") DAOCurrencyService daoCurrencyService) {
+                              @Qualifier("daoCurrencyService") DAOCurrencyService daoCurrencyService,
+                              @Qualifier("normalCurrencyService") NormalCurrencyService normalCurrencyService) {
         this.currencyService = currencyService;
         this.daoCurrencyService = daoCurrencyService;
+        this.normalCurrencyService = normalCurrencyService;
     }
 
     @PostMapping("")
@@ -178,6 +185,17 @@ public class CurrencyController {
             @RequestBody CrupdateCurrencyDTO currencyDTO) {
         CurrencyDTO createdCurrencyDTO = daoCurrencyService.createAndUpdate(currencyDTO);
         return new ResponseEntity<>(createdCurrencyDTO, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/createAll")
+    @Transactional
+    @Operation(
+            summary = "Create list of currencies",
+            description = "Create list of currencies"
+    )
+    public ResponseEntity<List<CurrencyEntity>> createAll(@RequestBody List<CurrencyEntity> currencyEntities){
+        normalCurrencyService.createAll(currencyEntities);
+        return new ResponseEntity<>(currencyEntities, HttpStatus.CREATED);
     }
 
 
