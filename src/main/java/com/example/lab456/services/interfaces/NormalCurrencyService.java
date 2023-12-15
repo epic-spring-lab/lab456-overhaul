@@ -9,5 +9,5 @@ public interface NormalCurrencyService {
 
     List<CurrencyEntity> getAll();
 
-    List<CurrencyEntity> createAll(List<CurrencyEntity> currencies);
+    List<CurrencyEntity> createAll(List<CrupdateCurrencyDTO> currencies);
 }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -54,8 +55,11 @@ public class CurrencyServiceImpl implements CRUDCurrencyService, NormalCurrencyS
 
     @Transactional
     @Override
-    public List<CurrencyEntity> createAll(List<CurrencyEntity> currencyEntities) {
-        currencyEntities.forEach(currencyEntity -> {
+    public List<CurrencyEntity> createAll(List<CrupdateCurrencyDTO> currencyDTOs) {
+        List<CurrencyEntity> currencyEntities = new ArrayList<>();
+        currencyDTOs.forEach(currencyDTO -> {
+            CurrencyEntity currencyEntity = CurrencyMapper.toEntity(currencyDTO);
+            currencyEntities.add(currencyEntity);
             currencyRepository.save(currencyEntity);
         });
         return currencyEntities;

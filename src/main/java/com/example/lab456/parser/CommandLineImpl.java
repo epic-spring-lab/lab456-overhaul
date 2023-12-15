@@ -1,5 +1,6 @@
 package com.example.lab456.parser;
 
+import com.example.lab456.dto.crupdate.CrupdateCurrencyDTO;
 import com.example.lab456.entities.CurrencyEntity;
 import com.example.lab456.entities.ExchangeDateEntity;
 import com.example.lab456.entities.ExchangeRateEntity;
@@ -48,10 +49,10 @@ public class CommandLineImpl implements CommandLineRunner {
         dateService.deleteAll();
         //insert currencies
         if (currencyService.getAll().isEmpty()) {
-            currencyService.createAll(List.of(CurrencyEntity.builder().name("USD").code("USD").build(),
-                    CurrencyEntity.builder().name("UAH").code("UAH").build(),
-                    CurrencyEntity.builder().name("EUR").code("EUR").build(),
-                    CurrencyEntity.builder().name("GBP").code("GBP").build()
+            currencyService.createAll(List.of(CrupdateCurrencyDTO.builder().name("USD").code("USD").build(),
+                    CrupdateCurrencyDTO.builder().name("UAH").code("UAH").build(),
+                    CrupdateCurrencyDTO.builder().name("EUR").code("EUR").build(),
+                    CrupdateCurrencyDTO.builder().name("GBP").code("GBP").build()
             ));
         }
         // List<Entity> create list of data, in order to insert it then in the database
